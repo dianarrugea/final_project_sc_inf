@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel App</title>
+    <script src="./script.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">Travella ~ <em>Plan your travel adventure</em></h1>
+        </div>
+        <img class="background-image" src="./images/mountains3.jpg" srcset="./images/background-portrait.jpg 900w, ./images/mountains3.jpg, 1000w" sizes="(max-width: 900px) 900px">
+        <!--App form & last searches-->
+
+        <div class="form-and-searches">
+            <div class="form">
+
+                <label for="destination">City</label>
+                <input class="form-input" type="text" id="destination-input" placeholder="City">
+
+                <label for="country-input">Country</label>
+                <input class="form-input" type="text" id="country-input" placeholder="Country">
+
+                <label for="date">Date</label>
+                <input class="form-input" type="date" id="travel-date-input" placeholder="">
+
+                <div class="submit-btn" id="submit-btn">Search</div>
+
+            </div>
+            <div class="last-searches" id="last-searches">
+                <h3 class="last-searches-title">Last searches:</h3>
+                <ul id="searches">
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- The Modal -->
+
+        <div id="destination-modal" class="modal">
+            <div class="modal-content" id="modalContent">
+                <!-- <span class="close">&times;</span> -->
+                <div class="modal-image" id="modal-image">
+                    <img class="modalImage img-fluid" id="modal_image"></img>
+                </div>
+                <div class="modal-info">
+                    <!-- Section for CITY, COUNTRY and FLAG  -->
+                    <h1 class="cityName"><span id="modal_city"></span>,</h1>
+                    <div class="country-info flex-row">
+                        <img class="countryFlag" id="country_flag"></img>
+                        <p class="country"> <span id="modal_country"></span>
+                        </p>
+                    </div>
+
+                    <!-- The TABS section -->
+                    <div class="tabs">
+                        <div class="tabs_bar">
+                            <Button class="tabs_button" data-for-tab="1">Weather</Button>
+                            <Button class="tabs_button" data-for-tab="2">Attractions</Button>
+                            <Button class="tabs_button" data-for-tab="3">Currency</Button>
+                        </div>
+
+                        <div class="tabs_content" data-tab="1">
+
+                            <!-- SELECTED DATE -->
+                            <p class="trip-date">Date: <span id="modal_date"></span></p>
+
+                            <!-- Average TEMP and weather ICON -->
+                            <div class="flex-row temperature-weather" id="tempAndIcon">
+                                <div class="weather-icon-div">
+                                    <img class="weatherIcon" id="modal_weather_icon"></img>
+                                </div>
+                                <div class="current-temp-div">
+                                    <p class="modalTemperature"><span id="modal_temperature"></span> °C</p>
+                                    <p class="modalWeatherDescription" id="modal_weather_description"></p>
+                                </div>
+                            </div>
+
+                            <!-- Min and Max for the day -->
+                            <div class="flex-row" id="minAndMax">
+                                <!-- Min -->
+                                <div class="flex-row width50">
+                                    <img class="lowHighTempIcon" src="./images/lowtemp.png">
+                                    <div class="lowHighTemp">
+                                        <p><span id="modal_min_temp"></span> °C</p>
+                                        <p class="lowHighDescription">Min</p>
+                                    </div>
+                                </div>
+                                <!-- Max -->
+                                <div class="flex-row width50">
+                                    <img class="lowHighTempIcon" src="./images/hightemp.png">
+                                    <div class="lowHighTemp">
+                                        <p><span id="modal_max_temp"></span> °C</p>
+                                        <p class="lowHighDescription">Max</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- No Weather forecast -->
+                            <div class="noWeatherForecast" id="noWeatherForecast">
+                                <div class="bg-danger text-white">
+                                    <p>There is no weather forecast for this date please try a date no later than 7
+                                        days from today.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attractions Tab    -->
+
+                        <div class="tabs_content" data-tab="2" style="text-align: center;">
+                            <div class="attractions-list">
+                                <ul id="attractions">
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Currency Tab -->
+
+                        <div class="tabs_content currency_tab" data-tab="3">
+                            <p class="currencyParagraph">The currency used in <span id="currency_destination"></span>
+                                is: <span id="local_currency"></span></p>
+                            <label class="currencyParagraphLabel" for="currencySelect">Select your local currency and the
+                                amount to convert:</label>
+                            <input type="number" id="input_currecy" name="userCurrency">
+                            <select class="currencyDropDown" id="currencySelect"> </select>
+                            <div class="currencyConverter">
+                                <p id="converted_currency"></p>
+                            </div>
+                            <div class="currency-btn" id="currency_button">Convert</div>
+                        </div>
+                    </div>
+
+                    <!-- Close button -->
+                    <div class="close-btn" id="closeButton">Close</div>
+                </div>
+            </div>
+        </div>
+
+        <!--Footer-->
+        <div class="footer">
+            <div class="social-media">
+                <a href="https://www.facebook.com">
+                    <img src="./images/facebook-logo.png" alt="facebook" class="sm-logo">
+                </a>
+                <a href="https://www.twitter.com">
+                    <img src="./images/twitter-logo.png" alt="twitter" class="sm-logo">
+                </a>
+                <a href="https://www.linkedin.com">
+                    <img src="./images/linkedIn-logo.png" alt="linkedin" class="sm-logo">
+                </a>
+            </div>
+            <div class="copyright">
+                Copyright &copy; <span id="year"></span> Diana Rugea
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
