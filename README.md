@@ -17,4 +17,4 @@
 * Geoapify
 * Free Currency
 
-<img width="668" alt="image" src="https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/d28ba8db-b9ff-4033-bcc6-07bd5b0b042f">
+<img width="1722" alt="Screenshot 2024-03-05 at 5 26 58 PM" src="https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/9a28024b-35ea-42fe-b485-fa7e0cbd84fc">
