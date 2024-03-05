@@ -17,4 +17,22 @@
 * Geoapify
 * Free Currency
 
+### User Input:
+* City
+* Country
+* Upcoming Travel Date
+
+<img width="144" alt="image" src="https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/7559b024-c1be-4bc7-b00f-3595e97f3cb8">
+
 <img width="1722" alt="Screenshot 2024-03-05 at 5 26 58 PM" src="https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/9a28024b-35ea-42fe-b485-fa7e0cbd84fc">
+
+### Weather Details
+* Current temperature
+* Weather Icon
+* Weather Description
+* Min & Max of the day
+
+![Screenshot 2024-03-05 at 5 28 47 PM](https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/84c50d5a-21da-48d4-97df-b623d170fe34)
+
+
+
