@@ -34,5 +34,19 @@
 
 ![Screenshot 2024-03-05 at 5 28 47 PM](https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/84c50d5a-21da-48d4-97df-b623d170fe34)
 
+### Attractions
+* Top attractions of the destination.With the following info displayed: 
+* Website (if available)
+* Address
+* Opening & Closing Time (if available)
+
+![Screenshot 2024-03-05 at 5 33 57 PM](https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/15f7b3b3-7644-4a4a-be31-1daa962522c0)
+
+### Currency
+* User’s local currency
+* Destination Currency
+
+![Screenshot 2024-03-05 at 5 38 31 PM](https://github.com/dianarrugea/final_project_sc_inf/assets/64359516/d08750c0-1eac-41f6-a8ae-bc40126b1761)
+
 
 
