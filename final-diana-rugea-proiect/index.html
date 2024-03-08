@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="./script.js"></script>
     <link rel="stylesheet" href="./style.css">
 </head>
@@ -16,7 +17,9 @@
         <div class="header">
             <h1 class="title">Travella ~ <em>Plan your travel adventure</em></h1>
         </div>
-        <img class="background-image" src="./images/mountains3.jpg" srcset="./images/background-portrait.jpg 900w, ./images/mountains3.jpg, 1000w" sizes="(max-width: 900px) 900px">
+        <img class="background-image" src="./images/mountains3.jpg"
+            srcset="./images/background-portrait.jpg 900w, ./images/mountains3.jpg, 1000w"
+            sizes="(max-width: 900px) 900px">
         <!--App form & last searches-->
 
         <div class="form-and-searches">
@@ -35,7 +38,10 @@
 
             </div>
             <div class="last-searches" id="last-searches">
-                <h3 class="last-searches-title">Last searches:</h3>
+                <div class="last-searches-header">
+                    <h3 class="last-searches-title">Last searches:</h3>
+                    <button id="delete_last_searches">Delete All</button>
+                </div>
                 <ul id="searches">
 
                 </ul>
@@ -126,7 +132,8 @@
                         <div class="tabs_content currency_tab" data-tab="3">
                             <p class="currencyParagraph">The currency used in <span id="currency_destination"></span>
                                 is: <span id="local_currency"></span></p>
-                            <label class="currencyParagraphLabel" for="currencySelect">Select your local currency and the
+                            <label class="currencyParagraphLabel" for="currencySelect">Select your local currency and
+                                the
                                 amount to convert:</label>
                             <input type="number" id="input_currecy" name="userCurrency">
                             <select class="currencyDropDown" id="currencySelect"> </select>
