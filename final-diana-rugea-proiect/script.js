@@ -2,13 +2,13 @@
 let destinationApiKey = "dianarrugea";
 // OLD
 let weatherbitKey = "64cbc61ae27641fd84a99cb135dbc5b5";
-// NEW
+// NEW - Back-Up Key
 // let weatherbitKey = "b5642abde47f453f8460b2cdd28a9ea0";
 let pixabayKey = "42065130-05791c39bfc24d87e892c0cf2";
 let currencyApiKey = "fca_live_SwdsmJbDmZMkLJAHGJsy0kbf8cUnHteepLWjX3if";
 // OLD
 let geoapifyApiKey = "1842f2b52fdc40e6bacd9856c5708883";
-// NEW
+// NEW - Back-Up Key
 // let geoapifyApiKey = "24f742fffbe0440f9e0a3167dbd5eb4d"
 
 // Get the modal
@@ -45,8 +45,8 @@ function getTripDate(date) {
   let month = departureDate.getMonth() + 1;
   let year = departureDate.getFullYear();
   departureDateFormated = day + "." + month + "." + year;
-  console.log("Depart Day: ", day, month, year);
-  console.log(departureDateFormated);
+  // console.log("Depart Day: ", day, month, year);
+  // console.log(departureDateFormated);
 
   const daysInMillis = departureDate.getTime() - dateNow.getTime();
   const daysToDeparture = Math.ceil(daysInMillis / (1000 * 3600 * 24));
@@ -193,7 +193,7 @@ async function runApis() {
   await getDestinationImage(destinationCity, destinationCountry, pixabayKey);
   await getCountryDetails(trip.country);
   await getAttractionsAtDestinatnion();
-  updateModalAttractions();
+  updateModalAttractions(trip);
 
   console.log(trip);
 }
@@ -206,7 +206,8 @@ function init() {
     performAction();
     // console.log("Button is Working");
   });
-
+  getAllCurrenciesAvailable();
+  getLocalStorage();
 }
 
 // The function that gets the user input, checks for field completions and calls the rest of the functions
@@ -241,8 +242,9 @@ performAction = async (event) => {
 
     // Transfer info from trip to last searches
     lastSearches.unshift(trip);
-    updateLastSeaches(trip)
-    console.log(lastSearches);
+    updateLastSeachesDisplay();
+    lastSearchesToCookies();
+    console.log("Last searches", lastSearches);
   }
 };
 
@@ -250,9 +252,11 @@ performAction = async (event) => {
 
 // Function that updates and displays the modal
 function updateModal(trip) {
+
   //Calling the function to set up the tabs in the modal
   setupTabs();
-
+  updateModalAttractions(trip);
+  selectDefaultCurrency();
   //Autoselect the first tab in the modal
   document.querySelectorAll(".tabs").forEach(tabsContainer => {
     tabsContainer.querySelector(".tabs_bar .tabs_button").click();
@@ -315,47 +319,62 @@ function setupTabs() {
 }
 
 // Function that updates and displays the list of last searches
-function updateLastSeaches(currentTrip) {
-  document.getElementById("last-searches").style.display = "block";
-  const listItem = document.createElement("li");
-  const individualTrip = document.createElement("div")
-  const tripImage = document.createElement("img");
-  const searchesText = document.createElement("div");
-  const cityParagraph = document.createElement("p");
-  const countryParagraph = document.createElement("p");
-  const dateParaghraph = document.createElement("p");
+function updateLastSeachesDisplay() {
+  $("#searches").empty();
+  if (lastSearches.length > 0) {
+    document.getElementById("last-searches").style.display = "block";
 
-  listItem.classList.add("searches-card");
-  tripImage.classList.add("searches-image");
-  searchesText.classList.add("searches-text");
-  cityParagraph.classList.add("searches-paraghraps");
-  countryParagraph.classList.add("searches-paraghraps");
+    lastSearches.forEach((currentTrip) => {
+      const listItem = document.createElement("li");
+      const individualTrip = document.createElement("div")
+      const tripImage = document.createElement("img");
+      const searchesText = document.createElement("div");
+      const cityParagraph = document.createElement("p");
+      const countryParagraph = document.createElement("p");
+      const dateParaghraph = document.createElement("p");
 
-  cityParagraph.textContent = currentTrip.cityName;
-  countryParagraph.textContent = currentTrip.country;
-  tripImage.src = currentTrip.image1;
+      listItem.classList.add("searches-card");
+      tripImage.classList.add("searches-image");
+      searchesText.classList.add("searches-text");
+      cityParagraph.classList.add("searches-paraghraps");
+      countryParagraph.classList.add("searches-paraghraps");
 
-  let list = document.getElementById("searches");
-  list.insertBefore(listItem, list.lastChild);
-  listItem.appendChild(individualTrip);
-  individualTrip.appendChild(tripImage);
-  individualTrip.appendChild(searchesText)
-  searchesText.appendChild(cityParagraph);
-  searchesText.appendChild(countryParagraph);
+      cityParagraph.textContent = currentTrip.cityName;
+      countryParagraph.textContent = currentTrip.country;
+      tripImage.src = currentTrip.image1;
 
-  listItem.addEventListener('click', () => {
-    updateModal(currentTrip);
-  })
+      let list = document.getElementById("searches");
+      list.appendChild(listItem);
+      listItem.appendChild(individualTrip);
+      individualTrip.appendChild(tripImage);
+      individualTrip.appendChild(searchesText)
+      searchesText.appendChild(cityParagraph);
+      searchesText.appendChild(countryParagraph);
+
+      listItem.addEventListener('click', () => {
+        updateModal(currentTrip);
+        trip = currentTrip;
+      })
+
+    });
+  } else {
+    document.getElementById("last-searches").style.display = "none";
+  }
 }
 
-// Listener for when the user clicks the close button
+// Listener for when the user clicks the close button or the delete last searches button
 document.addEventListener("DOMContentLoaded", () => {
   let closeButton = document.getElementById("closeButton");
   closeButton.onclick = function () {
     document.getElementById("destination-modal").style.display = "none";
     document.getElementById("converted_currency").innerHTML = " ";
     document.getElementById("input_currecy").value = 0;
+  }
 
+  let deleteAllButton = document.getElementById("delete_last_searches");
+  deleteAllButton.onclick = function () {
+    deleteLastSearches();
+    lastSearchesToCookies();
   }
 });
 
@@ -376,7 +395,8 @@ function setCopyrightYear() {
 // ATTRACTIONS
 
 // Function that updates the attractions tab in the modal
-function updateModalAttractions() {
+function updateModalAttractions(trip) {
+  clearAttractionsList();
   trip.attractionsAtDestination.forEach((attraction) => {
     const attractionItem = document.createElement("li");
     const attractionNameP = document.createElement("p");
@@ -422,39 +442,85 @@ function populateCurrencyDropDown() {
   });
 
   // Select a default currency if the user doesn't choose one from the dropdown menu(EURO)
-  selectElement.options[0].selected = true;
-  trip.selectedCurrency = selectElement[0].value;
+  selectDefaultCurrency();
 
   // Listener for when the user chooses a different currency
   selectElement.addEventListener("change", function () {
     trip.selectedCurrency = selectElement.value;
-    console.log(`Selected currency: ${selectedCurrency}`);
-    // getCurrencyValuesForConversion();
+    // console.log(`Selected currency: ${selectedCurrency}`);
   });
+}
+
+// Preselect defaulCurrency to EUR
+function selectDefaultCurrency() {
+  const selectElement = document.getElementById("currencySelect");
+  selectElement.options[0].selected = true;
+  trip.selectedCurrency = selectElement[0].value;
+  selectElement.selectedIndex = 0;
+  selectElement.dispatchEvent(new Event('change'));
 }
 
 // Listener for the convert button
 document.addEventListener("DOMContentLoaded", () => {
   let currencyButton = document.getElementById("currency_button");
   currencyButton.onclick = function () {
-    convertCurrency();
+    convertCurrency(trip);
   }
 });
 
 // Function that converts to local currency and updates modal
-async function convertCurrency() {
+async function convertCurrency(trip) {
   //Gets the updated exchange rate after user chooses his local curency
   await getCurrencyValuesForConversion();
-  
+
   let userInputValue = document.getElementById("input_currecy").value;
   let exchangeRate = trip.exchangeRate;
   let convertedValueToCurrency = userInputValue * exchangeRate;
   let trimmedResult = convertedValueToCurrency.toFixed(2);
+  let currencyAtDestination = trip.currencyName;
+
+  console.log("Trip Object at currency conversion: ", trip);
 
   // Displays a message if the user tries to convert to the same currency otherwhise displays the conversion
   if (trip.currencyName == trip.selectedCurrency) {
     document.getElementById("converted_currency").innerHTML = "Your destination country uses the same currency as you, please select a different currency to convert";
   } else {
-    document.getElementById("converted_currency").innerHTML = " Converted to local currency: " + userInputValue + " " + trip.selectedCurrency + " = " + trimmedResult + " " + trip.currencyName;
+    document.getElementById("converted_currency").innerHTML = " Converted to local currency: " + userInputValue + " " + trip.selectedCurrency + " = " + trimmedResult + " " + currencyAtDestination;
   }
+}
+
+// Function that clears the attractions list before loading a new one
+function clearAttractionsList() {
+  $("#attractions").empty();
+}
+
+// Add lastSearches to cookies
+function lastSearchesToCookies() {
+  // Convert the array to a JSON string
+  const lastSearchesJsonString = JSON.stringify(lastSearches);
+
+  // Store the JSON string in localStorage
+  localStorage.setItem("myArray", lastSearchesJsonString);
+}
+
+function getLocalStorage() {
+  if (localStorage.getItem("myArray") !== null) {
+    const storedJsonString = localStorage.getItem("myArray");
+
+    // Parse the JSON string back to an array
+    const storedArray = JSON.parse(storedJsonString);
+
+    // Restore the values to lastSearches array
+    lastSearches = storedArray;
+
+    // Update the interface
+    updateLastSeachesDisplay();
+  } else {
+    console.log("Local storage is empty");
+  }
+}
+
+function deleteLastSearches() {
+  lastSearches = []
+  updateLastSeachesDisplay();
 }
